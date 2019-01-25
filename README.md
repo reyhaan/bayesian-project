@@ -52,15 +52,15 @@ memory_replacement_policy heap GDSF
 
 cache_replacement_policy heap LFUDA
 
-cache_dir ufs /var/spool/squid3 100 16 256
+cache_dir ufs /var/spool/squid 100 16 256
 
 maximum_object_size 1 GB
 
-cache_store_log /var/log/squid3/store.log
+cache_store_log /var/log/squid/store.log
 
-coredump_dir /var/spool/squid3
+coredump_dir /var/spool/squid
 
-url_rewrite_program /etc/squid3/url_rewrite
+url_rewrite_program /etc/squid/url_rewrite
 
 acl url_rewrite_list dstdomain .google.com .google.de .tiles.virtualearth.net
 
@@ -74,9 +74,9 @@ url_rewrite_access allow url_rewrite_list
 
 url_rewrite_access deny all
 
-include /etc/squid3/refresh_pattern_specific.conf
+include /etc/squid/refresh_pattern_specific.conf
 
-include /etc/squid3/refresh_pattern.conf
+include /etc/squid/refresh_pattern.conf
 
 quick_abort_min 100 KB
 
