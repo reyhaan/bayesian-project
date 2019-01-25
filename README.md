@@ -1,12 +1,25 @@
-acl localnet src 192.168.0.0/16acl localnet src 10.0.0.0/8
+acl localnet src 192.168.0.0/16
+
+acl localnet src 10.0.0.0/8
 
 acl workintra src 172.30.100.0/23
 
-acl localnet src fc00::/7acl localnet src fe80::/10
+acl localnet src fc00::/7
+acl localnet src fe80::/10
 
 acl SSL_ports port 443
 
-acl Safe_ports port 80acl Safe_ports port 21acl Safe_ports port 443acl Safe_ports port 70acl Safe_ports port 210acl Safe_ports port 1025-65535acl Safe_ports port 280acl Safe_ports port 488acl Safe_ports port 591acl Safe_ports port 777acl CONNECT method CONNECT
+acl Safe_ports port 80
+acl Safe_ports port 21
+acl Safe_ports port 443
+acl Safe_ports port 70
+acl Safe_ports port 210
+acl Safe_ports port 1025-65535
+acl Safe_ports port 280
+acl Safe_ports port 488
+acl Safe_ports port 591
+acl Safe_ports port 777
+acl CONNECT method CONNECT
 
 # Authentication
 
@@ -90,66 +103,3 @@ forwarded_for delete
 refresh_all_ims on
 
 reload_into_ims on
-
-
-# Add monitoring stuff
-
-# restricted url’s list such as some social networks, adult sites
-
-# file must contain one domain per line
-
-acl restricted_urls url_regex -i "/etc/squid/restricted_urls"
-
-# anonymous proxies, web anonymizers and so on
-
-# file must contain one domain per line (example: domain. )
-
-acl anonymous_list url_regex  -i “/etc/squid/anon_proxy.list”
-
-# working hours of Monitis’ office (just an example)
-
-acl WorkingHours_Monitis time D 09:00-18:00
-
-# working hours of Netangels’ office (just an example)
-
-acl WorkingHours_Netangels time D 10:00-19:00
-
-# Netangel’s local network range (just an example)
-
-acl Netangels_Net src 192.168.10.0/24
-
-# Monitis’ local network range (just an example)
-
-acl Monitis_Net src 192.168.20.0/24
-
-acl Sec_Perimeter src Netangels_Net Monitis_Net
-
-# deny access for some resources in working hours
-
-http_access allow WorkingHours_Monitis !restricted_urls
-
-http_access allow WorkingHours_Netangels !restricted_urls
-
-# deny access to anonymizers
-
-http_access deny anonymous_list
-
-# preventing cache hits for local resources
-
-acl NetangelsLocal dstdomain .netangels.net
-
-acl MonitisLocal dstdomain .monitis.com
-
-# deny caching for nearby servers, because they don't benefit too
-
-# much from cache hits and for saving storage
-
-no_cache deny NetangelsLocal
-
-no_cache deny MonitisLocal
-
-#
-
-# deny access for unwanted networks
-
-http_access allow Sec_Perimeter
