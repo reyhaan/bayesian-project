@@ -8,6 +8,13 @@ acl SSL_ports port 443
 
 acl Safe_ports port 80acl Safe_ports port 21acl Safe_ports port 443acl Safe_ports port 70acl Safe_ports port 210acl Safe_ports port 1025-65535acl Safe_ports port 280acl Safe_ports port 488acl Safe_ports port 591acl Safe_ports port 777acl CONNECT method CONNECT
 
+# Authentication
+
+auth_param basic program /usr/lib/squid/basic_ncsa_auth /etc/squid/passwords
+auth_param basic realm proxy
+acl authenticated proxy_auth REQUIRED
+http_access allow authenticated
+
 http_access allow manager localhost
 
 http_access deny manager
@@ -20,7 +27,7 @@ http_access allow localnet workintra
 
 http_access allow localhost
 
-http_access deny all
+# http_access allow all
 
 http_port 3128
 
