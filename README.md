@@ -74,10 +74,6 @@ url_rewrite_access allow url_rewrite_list
 
 url_rewrite_access deny all
 
-include /etc/squid/refresh_pattern_specific.conf
-
-include /etc/squid/refresh_pattern.conf
-
 quick_abort_min 100 KB
 
 quick_abort_max 200 MB
